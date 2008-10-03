@@ -1,0 +1,7 @@
+h1. Menuer Rails Plugin
+
+Provides a mechanism to generate tab menus, handling current selection and visibility.
+
+
+
+Copyright (c) 2008 Sebastián B. Galkin, released under the MIT license
