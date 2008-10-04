@@ -1,7 +1,102 @@
 h1. Menuer Rails Plugin
 
-Provides a mechanism to generate tab menus, handling current selection and visibility.
+Provides a mechanism to generate menus, handling current selection and
+visibility.
 
+h2. Description
+
+Displaying a menu in your application, is not a trivial task. Some of the
+points you must take into account are
+
+* Different actions (@link_to@, @link_to_remote@).
+* Different rendering styles.
+* Current selected item feedback.  
+* Hiding or showing items according to different conditions.
+
+Menuer is a Rails plugin that simplifies all this. It has a simple but
+powerfull interface, that makes simple tasks easy, but allows a great
+flexibility when needed.
+
+h2. Usage
+
+h3. Basic usage
+
+In your @ApplicationHelper@ module:
+
+<pre><code class="ruby">
+  def main_menu
+    # this menu will render using link_to, selected item will have
+    # 'selected' class in its link node.
+    returning build_menu(self, :class => :selected) do |menu|
+      # this item will go to an external URL.
+      menu.add_tab('Google', 'http://google.com')
+
+      # this item will go to a controller/action, and will be highlighted while
+      # current page is that corresponding to that controller and action.
+      menu.add_tab_with_selected_options('Other Users', {:controller => :users, :action => :index})
+
+      # this item will go to account_path action, and will be highlighted,
+      # as long as the current controller name matches the given regular
+      # expression.
+      menu.add_tab_with_selected_match('My Account', account_path(current_user), /^accounts$/)
+
+      # this item will go to public_path action, and will be highlighted,
+      # as long as the current controller name matches /^public$/, and the current
+      # action matches /^home$/.
+      menu.add_tab_with_selected_match('Home', public_path, /^public$/, /^home$/)
+    end
+  end
+</code></pre>
+
+In your layout template:
+
+<pre><code class="ruby">
+  <div class="menu" >
+    <ul>
+      <% main_menu.each do |tab| %>
+        <%= content_tag(:li, tab.render)%>
+      <% end %>
+    </ul>
+  </div>
+</code></pre>
+
+
+h3. Advanced usage
+
+If the previus demo is not enough for your needs, you can do things link
+the following (but don't forget to check the documentation)
+
+<pre><code class="ruby">
+  tab = menu.add_tab('My Car', my_car_url)
+  # this will show the tab, only when there is a current_user and he has a car.
+  # Otherwise, the menu item will not appear.
+  tab.visible_on {current_user && current_user.car}
+
+  # page_selector allows to fine tune when the item is highlighted.
+  # Here, we are asking to highlight only when @car variable
+  # equals the current_user car
+  tab.page_selector.on {current_user && current_user.car == @car}
+
+  # we can OR conditions on the page selector
+  tab = menu.add_tab('Profile', user_data_path(current_user))
+  tab.page_selector.on_matching_regex(/^(user_data|images|jobs)$/)
+  tab.page_selector.on_options({:controller => :hobbies})
+  tab.page_selector.on {@my_profile}
+
+  # we can use dynamic urls for the items
+  tab = menu.add_tab_with_selected_options('Best Friend', lambda {user_data_path(@my_friend)})
+
+</code></pre>
+
+
+h2. Install
+
+The usual mechanism for plugin installation
+
+ruby script/plugin install git://github.com/paraseba/menuer.git
+
+Or clone the git repository.
 
 
 Copyright (c) 2008 Sebastián B. Galkin, released under the MIT license
+
