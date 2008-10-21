@@ -18,9 +18,19 @@ class Builder
   # +default_selected_options+: default HTML options that will be merged do +default_html_options+ in the link when it's selected
   # +default_html_options+: default HTML options for the link.
   # +renderer+: link renderer object. If not passed <tt>MenuCreator::default_renderer</tt> will be used
+  # yields self if passed a block
+  #
+  # Sample:
+  # Builder.new(self, :selected => true) do |menu|
+  #   menu.add_tab_with_selected_match('start', home_path, /^home$/, /^index$/)
+  # end
+  #
   def initialize(template, default_selected_options, default_html_options = {}, renderer = default_renderer.new(template))
     @template, @html_options, @selected_options, @renderer = template, default_html_options, default_selected_options, renderer
     @tabs = []
+    if block_given?
+      yield(self)
+    end
   end
 
   # Adds a new tab to the menu.

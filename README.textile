@@ -27,7 +27,7 @@ In your @ApplicationHelper@ module:
   def main_menu
     # this menu will render using link_to, selected item will have
     # 'selected' class in its link node.
-    returning build_menu(self, :class => :selected) do |menu|
+    build_menu(self, :class => :selected) do |menu|
       # this item will go to an external URL.
       menu.add_tab('Google', 'http://google.com')
 
