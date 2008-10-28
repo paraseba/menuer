@@ -1,6 +1,8 @@
+module Menuer
+
 # This class works in conjuntion with +MenuCreator+ to render menues.
 # Its responsability is to render link_to_fuctions.
-class MenuCreatorLinkToFunctionRenderer
+class LinkToFunctionRenderer
   # +template+: the rendering module used, normally, since +MenuCreator+ is called from a view, +self+ is passed.
   def initialize(template)
     @template = template
@@ -16,3 +18,5 @@ class MenuCreatorLinkToFunctionRenderer
     @template.link_to_function(name, function, html_options)
   end
 end
+
+end # module Menuer
