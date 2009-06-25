@@ -51,7 +51,7 @@ module Menuer
     # Do the actual rendering of the tab's link.
     def render
       if renderer.respond_to?(:render_tab)
-        renderer.render_tab(tab, get_or_call(name), get_or_call(options), tab_render_options)
+        renderer.render_tab(self, get_or_call(name), get_or_call(options), tab_render_options)
       else
         renderer.render(get_or_call(name), get_or_call(options), tab_render_options)
       end
